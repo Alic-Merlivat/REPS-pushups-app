@@ -1,0 +1,113 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isSignedIn() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'displayName', 'totalReps', 'dailyReps', 'weeklyReps', 'monthlyReps', 'yearlyReps'])
+        && data.keys().hasOnly([
+          'uid', 'displayName', 'email', 'photoURL',
+          'totalReps', 'dailyReps', 'weeklyReps', 'monthlyReps', 'yearlyReps',
+          'spankedCount', 'lastActiveDate', 'lastActiveWeek', 'lastActiveMonth', 'lastActiveYear',
+          'inviteCode', 'city', 'age', 'height', 'weight',
+          'notificationSettings', 'googleHealthConnected', 'googleHealthLastSync',
+          'isPro', 'isTrial', 'trialEndsAt', 'planType',
+          'friends', 'createdAt', 'updatedAt'
+        ])
+        && data.uid is string && data.uid == request.auth.uid && data.uid.size() <= 128
+        && data.displayName is string && data.displayName.size() > 0 && data.displayName.size() <= 60
+        && (!('email' in data) || (data.email is string && data.email.size() <= 150))
+        && (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500))
+        && data.totalReps is number && data.totalReps >= 0
+        && data.dailyReps is number && data.dailyReps >= 0
+        && data.weeklyReps is number && data.weeklyReps >= 0
+        && data.monthlyReps is number && data.monthlyReps >= 0
+        && data.yearlyReps is number && data.yearlyReps >= 0
+        && (!('spankedCount' in data) || (data.spankedCount is number && data.spankedCount >= 0))
+        && (!('friends' in data) || (data.friends is list && data.friends.size() <= 200))
+        && (!('inviteCode' in data) || (data.inviteCode is string && data.inviteCode.size() <= 32))
+        && (!('city' in data) || (data.city is string && data.city.size() <= 100))
+        && (!('age' in data) || (data.age is number || (data.age is string && data.age.size() <= 20)))
+        && (!('height' in data) || (data.height is string && data.height.size() <= 50))
+        && (!('weight' in data) || (data.weight is string && data.weight.size() <= 50))
+        && (!('googleHealthConnected' in data) || data.googleHealthConnected is bool)
+        && (!('googleHealthLastSync' in data) || (data.googleHealthLastSync is string && data.googleHealthLastSync.size() <= 64))
+        && (!('notificationSettings' in data) || data.notificationSettings is map)
+        && (!('isPro' in data) || data.isPro is bool)
+        && (!('isTrial' in data) || data.isTrial is bool)
+        && (!('planType' in data) || (data.planType is string && data.planType.size() <= 32))
+        && (!('trialEndsAt' in data) || (data.trialEndsAt is number || data.trialEndsAt is timestamp));
+    }
+
+    function isValidWorkout(data) {
+      return data.keys().hasAll(['id', 'userId', 'displayName', 'reps', 'durationSeconds', 'dateStr'])
+        && data.keys().hasOnly(['id', 'userId', 'displayName', 'reps', 'durationSeconds', 'formScore', 'dateStr', 'createdAt'])
+        && data.id is string && data.id.size() <= 128
+        && data.userId is string && data.userId == request.auth.uid && data.userId.size() <= 128
+        && data.displayName is string && data.displayName.size() <= 60
+        && data.reps is number && data.reps >= 0 && data.reps <= 10000
+        && data.durationSeconds is number && data.durationSeconds >= 0 && data.durationSeconds <= 86400
+        && data.dateStr is string && data.dateStr.size() <= 10;
+    }
+
+    function isValidSpank(data) {
+      return data.keys().hasAll(['id', 'targetUid', 'fromUid', 'dateKey'])
+        && data.keys().hasOnly(['id', 'targetUid', 'targetName', 'fromUid', 'fromName', 'dateKey', 'createdAt'])
+        && data.id is string && data.id.size() <= 128
+        && data.targetUid is string && data.targetUid.size() <= 128
+        && data.fromUid is string && data.fromUid == request.auth.uid && data.fromUid.size() <= 128
+        && data.fromUid != data.targetUid
+        && (!('targetName' in data) || (data.targetName is string && data.targetName.size() <= 60))
+        && (!('fromName' in data) || (data.fromName is string && data.fromName.size() <= 60))
+        && data.dateKey is string && data.dateKey.size() <= 20;
+    }
+
+    match /users/{userId} {
+      allow get: if isSignedIn() && isValidId(userId);
+      allow list: if isSignedIn();
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming());
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming())
+        && incoming().uid == existing().uid;
+      allow delete: if isOwner(userId) && isValidId(userId);
+    }
+
+    match /workouts/{workoutId} {
+      allow get: if isSignedIn() && isValidId(workoutId);
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(workoutId) && isValidWorkout(incoming()) && incoming().userId == request.auth.uid;
+      allow update: if isSignedIn() && isValidId(workoutId) && isValidWorkout(incoming()) && existing().userId == request.auth.uid && incoming().userId == existing().userId;
+      allow delete: if isSignedIn() && isValidId(workoutId) && existing().userId == request.auth.uid;
+    }
+
+    match /spanks/{spankId} {
+      allow get: if isSignedIn() && isValidId(spankId);
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(spankId) && isValidSpank(incoming());
+      allow update, delete: if false;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Reps, A numbers game - AI Pushup counter",
+  "description": "Track pushups in real-time, compete on global leaderboards and monitor your progress.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

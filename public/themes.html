@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REPS — Neon App Themes Showcase</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #09090b;
+      color: #f4f4f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 24px 16px 60px;
+    }
+    .header {
+      max-width: 1200px;
+      margin: 0 auto 32px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      background: linear-gradient(to right, #ffffff, #a1a1aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      font-size: 14px;
+      color: #a1a1aa;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .grid {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #27272a;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-palette {
+      font-size: 11px;
+      color: #71717a;
+      margin-top: 4px;
+    }
+    .img-wrap {
+      width: 100%;
+      background: #000;
+      aspect-ratio: 9 / 16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-footer {
+      padding: 14px 20px;
+      background: #121215;
+      font-size: 12px;
+      color: #a1a1aa;
+      line-height: 1.4;
+    }
+    .btn-view {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #27272a;
+      color: #fff;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      transition: background 0.15s;
+    }
+    .btn-view:hover {
+      background: #3f3f46;
+    }
+    .cyberpunk:hover { border-color: #ec4899; }
+    .acid:hover { border-color: #a3e635; }
+    .cosmic:hover { border-color: #38bdf8; }
+    .magma:hover { border-color: #f97316; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="badge">Visual Concepts</div>
+    <h1>4 Neon Atmosphere Themes for REPS</h1>
+    <p class="subtitle">Visual concepts showing how the app can look with different color systems and atmospheric themes.</p>
+  </div>
+
+  <div class="grid">
+    <!-- Theme 1 -->
+    <div class="card cyberpunk">
+      <div class="card-header">
+        <div class="card-title" style="color: #f43f5e;">🕹️ 1. Cyberpunk Synthwave</div>
+        <div class="card-palette">Electric Cyan · Neon Magenta · Laser Pink · Obsidian</div>
+      </div>
+      <div class="img-wrap">
+        <img src="/themes/cyberpunk.jpg" alt="Cyberpunk Synthwave Neon Theme" loading="lazy">
+      </div>
+      <div class="card-footer">
+        Retro-futuristic 80s arcade feel with glowing cyan numbers, laser pink borders, and glowing squad boxes.
+        <a href="/themes/cyberpunk.jpg" target="_blank" class="btn-view">Open Full Resolution ↗</a>
+      </div>
+    </div>
+
+    <!-- Theme 2 -->
+    <div class="card acid">
+      <div class="card-header">
+        <div class="card-title" style="color: #bef264;">⚡ 2. Toxic Acid Streetwear</div>
+        <div class="card-palette">Radioactive Lime · Safety Yellow · Carbon Asphalt</div>
+      </div>
+      <div class="img-wrap">
+        <img src="/themes/acid.jpg" alt="High Voltage Acid Neon Theme" loading="lazy">
+      </div>
+      <div class="card-footer">
+        Brutalist underground gym aesthetic with high-visibility radioactive lime accents and carbon textures.
+        <a href="/themes/acid.jpg" target="_blank" class="btn-view">Open Full Resolution ↗</a>
+      </div>
+    </div>
+
+    <!-- Theme 3 -->
+    <div class="card cosmic">
+      <div class="card-header">
+        <div class="card-title" style="color: #38bdf8;">🌌 3. Cosmic Bioluminescence</div>
+        <div class="card-palette">Bioluminescent Aqua · Royal Indigo · Ultraviolet Purple</div>
+      </div>
+      <div class="img-wrap">
+        <img src="/themes/cosmic.jpg" alt="Deep Space Cosmic Neon Theme" loading="lazy">
+      </div>
+      <div class="card-footer">
+        Ethereal sci-fi luxury fitness with frosted translucent glass, radiant aqua meters, and soft violet glow.
+        <a href="/themes/cosmic.jpg" target="_blank" class="btn-view">Open Full Resolution ↗</a>
+      </div>
+    </div>
+
+    <!-- Theme 4 -->
+    <div class="card magma">
+      <div class="card-header">
+        <div class="card-title" style="color: #fb923c;">🔥 4. Solar Flare Magma</div>
+        <div class="card-palette">Blazing Neon Orange · Molten Amber · Crimson Ember</div>
+      </div>
+      <div class="img-wrap">
+        <img src="/themes/magma.jpg" alt="Solar Flare Magma Neon Theme" loading="lazy">
+      </div>
+      <div class="card-footer">
+        Intense beast-mode energy with blazing heat-map stat cards, glowing molten numbers, and fiery power.
+        <a href="/themes/magma.jpg" target="_blank" class="btn-view">Open Full Resolution ↗</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

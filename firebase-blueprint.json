@@ -1,0 +1,86 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public user profile and aggregated pushup stats for the scoreboard",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 60 },
+        "email": { "type": "string", "maxLength": 150 },
+        "photoURL": { "type": "string", "maxLength": 500 },
+        "totalReps": { "type": "number" },
+        "dailyReps": { "type": "number" },
+        "weeklyReps": { "type": "number" },
+        "monthlyReps": { "type": "number" },
+        "yearlyReps": { "type": "number" },
+        "spankedCount": { "type": "number" },
+        "lastActiveDate": { "type": "string", "maxLength": 10 },
+        "lastActiveWeek": { "type": "string", "maxLength": 10 },
+        "lastActiveMonth": { "type": "string", "maxLength": 10 },
+        "lastActiveYear": { "type": "number" },
+        "inviteCode": { "type": "string", "maxLength": 32 },
+        "city": { "type": "string", "maxLength": 100 },
+        "age": { "type": ["number", "string"] },
+        "height": { "type": "string", "maxLength": 50 },
+        "weight": { "type": "string", "maxLength": 50 },
+        "notificationSettings": { "type": "object" },
+        "googleHealthConnected": { "type": "boolean" },
+        "googleHealthLastSync": { "type": "string", "maxLength": 64 },
+        "isPro": { "type": "boolean" },
+        "isTrial": { "type": "boolean" },
+        "planType": { "type": "string", "maxLength": 32 },
+        "trialEndsAt": { "type": ["number", "string"] },
+        "friends": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "totalReps", "dailyReps", "weeklyReps", "monthlyReps", "yearlyReps"]
+    },
+    "Workout": {
+      "title": "Workout",
+      "description": "Log of completed pushup workout session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 60 },
+        "reps": { "type": "number" },
+        "durationSeconds": { "type": "number" },
+        "formScore": { "type": "number" },
+        "dateStr": { "type": "string", "maxLength": 10 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "displayName", "reps", "durationSeconds", "dateStr"]
+    },
+    "Spank": {
+      "title": "Spank",
+      "description": "Punishment reminder sent to a squad member who missed daily pushups",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "targetUid": { "type": "string", "maxLength": 128 },
+        "targetName": { "type": "string", "maxLength": 60 },
+        "fromUid": { "type": "string", "maxLength": 128 },
+        "fromName": { "type": "string", "maxLength": 60 },
+        "dateKey": { "type": "string", "maxLength": 20 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "targetUid", "fromUid", "dateKey"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile with pushup aggregates for leaderboards and friend tracking"
+    },
+    "/workouts/{workoutId}": {
+      "schema": "Workout",
+      "description": "Pushup session logs created by users"
+    },
+    "/spanks/{spankId}": {
+      "schema": "Spank",
+      "description": "Squad reminder spanks sent to inactive members"
+    }
+  }
+}
