@@ -136,12 +136,70 @@ To provide a native iOS/Android feel on the web, squad member cards implement to
 
 ---
 
-## 📱 Google Play & App Store Packaging
+---
 
-This app is configured for store distribution using **Trusted Web Activity (TWA)** and **Capacitor**:
-- **Android (.aab):** Packaged via `@bubblewrap/cli` or Capacitor Android.
-- **iOS:** Built via Xcode with `@capacitor/ios`.
-- Comprehensive deployment instructions are documented in `STORE_LAUNCH_GUIDE.md`.
+## 📱 Android APK Generation & GitHub Actions Workflow
+
+This repository is pre-configured with **Capacitor Android** and an automated **GitHub Actions CI/CD pipeline** (`.github/workflows/build-apk.yml`) that automatically compiles an installable Android `.apk` on every push!
+
+### Option A: Automated Build via GitHub Actions (Recommended)
+
+1. **Create a new repository on GitHub:**
+   - Go to [github.com/new](https://github.com/new) and create a repository (e.g., `reps-app`).
+
+2. **Push your code to GitHub:**
+   ```bash
+   git remote add origin https://github.com/<YOUR-USERNAME>/<YOUR-REPO>.git
+   git branch -M main
+   git push -u origin main
+   ```
+
+3. **Download your compiled APK:**
+   - Go to the **Actions** tab on your GitHub repository.
+   - Click on the running/finished workflow **"Build Android APK"**.
+   - Under **Artifacts** at the bottom of the summary page, download `Reps-Android-APK` (contains `Reps-v1.0.0.apk`).
+   - Transfer to your Android phone or share the download link!
+
+---
+
+### Option B: Build the APK Locally with Android Studio
+
+If you have Android Studio installed on your computer:
+
+1. **Install dependencies and sync:**
+   ```bash
+   npm install
+   npm run build
+   npx cap sync android
+   ```
+
+2. **Open in Android Studio:**
+   ```bash
+   npx cap open android
+   ```
+   *(Or open the `android` folder in Android Studio).*
+
+3. **Generate the APK:**
+   - In Android Studio menu, click: **Build** → **Build Bundle(s) / APK(s)** → **Build APK(s)**.
+   - Once completed, click **locate** to grab your `app-debug.apk`.
+
+4. **Command-Line Build (without Android Studio GUI):**
+   ```bash
+   cd android
+   ./gradlew assembleDebug
+   # Output APK is in: android/app/build/outputs/apk/debug/app-debug.apk
+   ```
+
+---
+
+### Option C: 1-Click Instant APK with PWABuilder (No Gradle/Java required)
+
+Because Reps is a standards-compliant Progressive Web App with full offline manifests and icons:
+1. Go to **[PWABuilder.com](https://www.pwabuilder.com)**.
+2. Enter the live app URL:
+   `https://ais-pre-vmm4vtwn776gejugukhniq-81540067927.europe-west2.run.app`
+3. Click **Start** → **Package for Stores** → **Android**.
+4. Download the generated APK / AAB package directly!
 
 ---
 
