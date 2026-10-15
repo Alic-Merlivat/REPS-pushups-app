@@ -41,6 +41,13 @@ Built as a commercial-grade Progressive Web App (PWA) packaged for Google Play a
 - **Dynamic Themes:** Includes **Night** (minimalist neon), **Aurora** (cyberpunk northern lights), **Inferno** (molten energy), and **Holopop** (candy gloss light mode).
 - **GPU-Accelerated Moving Backgrounds:** Interactive particle canvas engines and dynamic gradient shaders.
 - **60% Translucent Frosted Glass:** Utilizes `backdrop-blur` and alpha compositing to allow animations to glide beneath data blocks while preserving contrast and legibility.
+  <p align="center">
+  <img src="images/style1.png" width="24%" />
+  <img src="images/style2.png" width="24%" />
+  <img src="images/style3.png" width="24%" />
+  <img src="images/style4.png" width="24%" />
+</p>
+
 
 ### 5. Production Monetization & Store Compliance
 - **Reps PRO Subscription:** In-app paywall offering a **5-day free trial** and **$15.99/year** ($1.33/month) or $2.99/month pricing.
@@ -205,4 +212,4 @@ Because Reps is a standards-compliant Progressive Web App with full offline mani
 
 ## 📄 License & Intellectual Property
 
-Proprietary software. Developed and engineered by **Nicolas Merlivat** for portfolio demonstration and commercial distribution. All rights reserved.
+Proprietary software. Developed and engineered by **Alic Merlivat** for portfolio demonstration and commercial distribution. All rights reserved.
