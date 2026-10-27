@@ -8,3 +8,4 @@ coverage/
 !.env.example
 .aistudio/
 dev-dist/
+public/assets/

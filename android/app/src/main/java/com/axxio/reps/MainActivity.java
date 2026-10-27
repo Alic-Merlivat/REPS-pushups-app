@@ -1,4 +1,4 @@
-package com.reps.app;
+package com.axxio.reps;
 
 import com.getcapacitor.BridgeActivity;
 

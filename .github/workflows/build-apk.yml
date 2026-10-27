@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android AAB and APK
 
 on:
   push:
@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   build:
-    name: Build Android APK
+    name: Build Android AAB & APK
     runs-on: ubuntu-latest
 
     steps:
@@ -52,30 +52,52 @@ jobs:
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew
 
-      - name: Build Debug APK with Gradle
+      - name: Create Release Signing Keystore
+        run: |
+          cd android/app
+          keytool -genkeypair -v \
+            -keystore release.keystore \
+            -alias reps-key \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass repsappkey123 \
+            -keypass repsappkey123 \
+            -dname "CN=REPS Pushups, OU=App, O=Axxio, L=Paris, ST=IDF, C=FR"
+
+      - name: Build Signed AAB and APK with Gradle
         run: |
           cd android
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew bundleRelease assembleRelease assembleDebug --stacktrace
 
-      - name: Rename APK for Easy Identification
+      - name: Organize Build Outputs
         run: |
           mkdir -p build-output
-          cp android/app/build/outputs/apk/debug/app-debug.apk build-output/Reps-v1.0.0.apk
+          # Locate and copy release AAB (Required for Google Play Console)
+          if [ -f "android/app/build/outputs/bundle/release/app-release.aab" ]; then
+            cp android/app/build/outputs/bundle/release/app-release.aab build-output/REPS-com.axxio.reps-release.aab
+          fi
+          # Copy release and debug APKs for direct testing
+          if [ -f "android/app/build/outputs/apk/release/app-release.apk" ]; then
+            cp android/app/build/outputs/apk/release/app-release.apk build-output/REPS-com.axxio.reps-release.apk
+          elif [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
+            cp android/app/build/outputs/apk/debug/app-debug.apk build-output/REPS-com.axxio.reps-debug.apk
+          fi
 
-      - name: Upload APK as Workflow Artifact
+      - name: Upload Artifacts (AAB for Google Play & APK for testing)
         uses: actions/upload-artifact@v4
         with:
-          name: Reps-Android-APK
-          path: build-output/Reps-v1.0.0.apk
+          name: Reps-GooglePlay-AAB-and-APK
+          path: build-output/*
           retention-days: 30
 
-      - name: Create GitHub Release with APK
+      - name: Create GitHub Release
         if: github.event.inputs.create_release == 'true' || startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name || 'v1.0.0' }}
-          name: Reps Android Release ${{ github.ref_name || 'v1.0.0' }}
-          files: build-output/Reps-v1.0.0.apk
+          name: REPS Android Release ${{ github.ref_name || 'v1.0.0' }}
+          files: build-output/*
           draft: false
           prerelease: false
           generate_release_notes: true

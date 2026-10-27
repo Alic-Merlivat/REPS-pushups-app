@@ -64,7 +64,7 @@ export const PushupCameraTracker: React.FC<PushupCameraTrackerProps> = ({ onClos
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
   const [isSoundMuted, setIsSoundMuted] = useState(false);
-  const [showPlacementTip, setShowPlacementTip] = useState(true);
+  const [showPlacementTip, setShowPlacementTip] = useState(false);
   const { isFullscreen, toggleFullscreen, enterFullscreen, isSupported } = useFullscreen();
 
   // Automatically attempt to enter full screen so top browser bar disappears

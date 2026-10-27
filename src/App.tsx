@@ -10,7 +10,6 @@ import { FriendsManager } from './components/FriendsManager';
 import { InviteFriendsModal } from './components/InviteFriendsModal';
 import { PushupCameraTracker } from './components/PushupCameraTracker';
 import { WorkoutProgressChart } from './components/WorkoutProgressChart';
-import { WorkoutSetupModal } from './components/WorkoutSetupModal';
 import { NotificationPermissionModal } from './components/NotificationPermissionModal';
 import { ThemeBackground } from './components/ThemeBackground';
 import { ProPaywallModal } from './components/ProPaywallModal';
@@ -42,7 +41,6 @@ function DashboardContent() {
   const { showPaywall, closePaywall, openPaywall } = useSubscription();
   const [activeTab, setActiveTab] = useState<NavTab>('workout');
   const [showInviteModal, setShowInviteModal] = useState(false);
-  const [showSetupModal, setShowSetupModal] = useState(false);
   const [isCameraWorkoutActive, setIsCameraWorkoutActive] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'privacy' | 'terms' | null>(null);
   const [detectedInviteCode, setDetectedInviteCode] = useState<string | null>(null);
@@ -152,25 +150,7 @@ function DashboardContent() {
   };
 
   const handleStartWorkout = () => {
-    const hasSeenGuide = localStorage.getItem('reps_has_seen_setup_guide');
-    if (!hasSeenGuide) {
-      // Visible only once when user starts the app for the first time
-      setShowSetupModal(true);
-    } else {
-      // Directly start workout for subsequent starts
-      launchCameraWorkout();
-    }
-  };
-
-  const handleConfirmStartTracking = () => {
-    localStorage.setItem('reps_has_seen_setup_guide', 'true');
-    setShowSetupModal(false);
     launchCameraWorkout();
-  };
-
-  const handleCloseSetupModal = () => {
-    localStorage.setItem('reps_has_seen_setup_guide', 'true');
-    setShowSetupModal(false);
   };
 
   if (loading) {
@@ -338,12 +318,6 @@ function DashboardContent() {
         </nav>
       )}
 
-      {/* Camera Workout Setup Guide Modal (Appears only the first time users start a workout) */}
-      <WorkoutSetupModal
-        isOpen={showSetupModal}
-        onClose={handleCloseSetupModal}
-        onStart={handleConfirmStartTracking}
-      />
 
       {/* Invite Friends Modal */}
       <InviteFriendsModal
